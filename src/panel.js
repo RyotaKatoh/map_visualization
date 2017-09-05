@@ -2,8 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import TWEEN from 'tween.js';
 
 const propTypes = {
-    settings: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired
+    settings: PropTypes.object.isRequired
 };
 
 export default class Panel extends Component {
@@ -30,7 +29,7 @@ export default class Panel extends Component {
     render() {
         return (
             <div>
-                { this._renderData(this.props.data) }
+                { this._renderData(this.props.settings) }
             </div>
         );
     }

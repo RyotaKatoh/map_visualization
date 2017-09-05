@@ -100,18 +100,14 @@ class Root extends Component{
             },
             settings: {
                 time: 0,
-                showParticles: false,
-                showWindDemo: false,
-                showElevation: false
+                store_name: '',
+                amount: 0,
+                store_latitude: 35.685175,
+                store_longitude: 139.7506055
             }
         };
 
         this.frameNum = 0;
-
-        this.store = {
-            store_name: '',
-            amount: 0
-        }
 
         autobind(this);
     }
@@ -146,13 +142,18 @@ class Root extends Component{
             // do on fire procedure
             //
             const idx = Math.floor( Math.random() * dummyStores.length );
-
-            this.store = dummyStores[idx];
+            const target = dummyStores[idx];
+            this._updateSettings({
+                store_name: target.store_name,
+                amount: target.amount,
+                store_latitude: target.latitude,
+                store_longitude: target.longitude
+            });
             
-            console.log(this.store.store_name);
+            console.log(this.state.settings.store_name);
             const positionState = {latitude: this.latitude, longitude: this.longitude};
             this._cameraAnimation = new TWEEN.Tween(positionState)
-                                        .to({latitude: this.store.latitude, longitude: this.store.longitude}, 500)
+                                        .to({latitude: this.state.settings.store_latitude, longitude: this.state.settings.store_longitude}, 500)
                                         .easing(TWEEN.Easing.Quartic.Out)
                                         .onUpdate(() => this.updateLatLng(positionState));
 
@@ -210,7 +211,7 @@ class Root extends Component{
                 </MapGL>
 
                 <div className="control-panel">
-                    <Panel settings={settings} data={this.store} />
+                    <Panel settings={settings}/>
                 </div>
             </div>
         )
