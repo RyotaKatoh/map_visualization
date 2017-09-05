@@ -6,6 +6,9 @@ import MapGL from 'react-map-gl';
 import {Simplex} from 'noise';
 import SimplexNoise from 'simplex-noise';
 
+import Layers from './layers/layers.js';
+import Panel from './panel.js';
+
 // import ControlPanel from './control-panel';
 import TWEEN from 'tween.js';
 
@@ -105,6 +108,11 @@ class Root extends Component{
 
         this.frameNum = 0;
 
+        this.store = {
+            store_name: '',
+            amount: 0
+        }
+
         autobind(this);
     }
 
@@ -139,11 +147,12 @@ class Root extends Component{
             //
             const idx = Math.floor( Math.random() * dummyStores.length );
 
-            const dummyStore = dummyStores[idx];
-            console.log(dummyStore.store_name);
+            this.store = dummyStores[idx];
+            
+            console.log(this.store.store_name);
             const positionState = {latitude: this.latitude, longitude: this.longitude};
             this._cameraAnimation = new TWEEN.Tween(positionState)
-                                        .to({latitude: dummyStore.latitude, longitude: dummyStore.longitude}, 500)
+                                        .to({latitude: this.store.latitude, longitude: this.store.longitude}, 500)
                                         .easing(TWEEN.Easing.Quartic.Out)
                                         .onUpdate(() => this.updateLatLng(positionState));
 
@@ -196,7 +205,13 @@ class Root extends Component{
                     mapboxApiAccessToken={MAPBOX_TOKEN}
                     perspectiveEnabled
                     onChangeViewport={this._updateViewport}>
+
+                    <Layers viewport={viewport} settings={settings} />
                 </MapGL>
+
+                <div className="control-panel">
+                    <Panel settings={settings} data={this.store} />
+                </div>
             </div>
         )
     }
